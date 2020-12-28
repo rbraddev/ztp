@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  dhcp:
+    container_name: dhcp
+    image: kosdk/dhcpd
+    network_mode: host
+    volumes:
+      - ./dhcp:/data

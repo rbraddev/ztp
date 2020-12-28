@@ -1,0 +1,14 @@
+venv
+.idea
+.vscode
+.dockerignore
+Dockerfile
+Dockerfile.prod
+.coverage
+coverage.xml
+htmlcov
+cov.html
+.pytest_cache
+tftproot/*
+dhcpd.leases
+dhcpd.leases~
