@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   dhcp:
@@ -10,6 +10,17 @@ services:
   tftp:
     container_name: tftp
     build: ./provisioning
-    network_mode: host
+    ports:
+      - "69:69/udp"
+    networks:
+      - backend
     volumes:
-      - ./provisioning/tftproot:/tftproot
+      - ./provisioning/tftproot:/usr/src/tftproot
+  redis:
+    image: redis:6-alpine
+    container_name: redis
+    networks:
+      - backend
+
+networks:
+  backend:

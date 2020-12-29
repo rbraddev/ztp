@@ -40,8 +40,8 @@ class TFTPServer(BaseServer):
 
 def main():
     server = TFTPServer(
-        address="10.0.0.1",
-        port=6969,
+        address="0.0.0.0",
+        port=69,
         retries=5,
         timeout=5,
         root="../tftproot",
