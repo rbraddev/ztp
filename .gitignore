@@ -7,6 +7,6 @@ cov.html
 .pytest_cache
 .idea
 .vscode
-tftp/tftproot/*
+provisioning/tftproot/*
 dhcpd.leases
 dhcpd.leases~
