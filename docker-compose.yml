@@ -7,3 +7,9 @@ services:
     network_mode: host
     volumes:
       - ./dhcp:/data
+  tftp:
+    container_name: tftp
+    build: ./provisioning
+    network_mode: host
+    volumes:
+      - ./provisioning/tftproot:/tftproot
