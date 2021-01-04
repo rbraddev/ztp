@@ -9,6 +9,6 @@ coverage.xml
 htmlcov
 cov.html
 .pytest_cache
-provisioning/tftproot/*
+files/*
 dhcpd.leases
 dhcpd.leases~

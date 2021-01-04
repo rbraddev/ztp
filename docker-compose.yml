@@ -15,7 +15,18 @@ services:
     networks:
       - backend
     volumes:
-      - ./provisioning/tftproot:/usr/src/tftproot
+      - ./files:/usr/src/tftproot
+  ftp:
+    container_name: ftp
+    image: instantlinux/vsftpd
+    ports:
+      - "20-21:20-21"
+      - "30091-30100:30091-30100"
+    environment: 
+      - ANONYMOUS_ENABLE=YES
+      - PASV_ADDRESS=10.0.0.1
+    volumes:
+      - ./files:/var/lib/ftp
   redis:
     image: redis:6-alpine
     container_name: redis

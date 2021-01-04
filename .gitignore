@@ -7,8 +7,7 @@ cov.html
 .pytest_cache
 .idea
 .vscode
-provisioning/tftproot/*
-!provisioning/tftproot/add_files_here.txt
+files/*
+!files/add_files_here.txt
 dhcpd.leases
 dhcpd.leases~
-�5@@XZ@8
