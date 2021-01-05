@@ -9,5 +9,6 @@ cov.html
 .vscode
 files/*
 !files/add_files_here.txt
+!files/ztp9300.py
 dhcpd.leases
 dhcpd.leases~
