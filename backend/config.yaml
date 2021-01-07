@@ -3,8 +3,8 @@ project: ZTP
 environment: dev
 swversions:
   "9300":
-    version: 16.12.04
+    version: "16.12.04"
     image: cat9k_iosxe.16.12.04.SPA.bin
   "3650":
-    version: 16.09.06
+    version: "16.09.06"
     image: cat3k_caa-universalk9.16.09.06.SPA.bin
