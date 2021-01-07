@@ -1,0 +1,6 @@
+wheel
+setuptools
+fastapi
+uvicorn
+ruamel.yaml
+aiofiles

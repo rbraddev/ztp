@@ -1,10 +1,39 @@
+import re
 import cli
 
-print "\n\n *** Enabling iPXE *** \n\n"
-cli.configurep(["boot ipxe timeout 30"])
 
-print "\n\n *** Saving configuration *** \n\n"
-cli.executep('copy running-config startup-config')
+def get_model():
+    model = re.search(b"Model\sNumber\s+:\s([\-\d\w]+)\\n", cli.execute("show version"))
+    model_number = re.match(b".+(\d{4})", model.groups()[0]) if model else None
+    return model_number.groups()[0] if model_number else None
 
-print "\n\n *** Rebooting *** \n\n"
-cli.executep('reload /noverify')
+
+def get_version():
+    version = re.search(b"^.*Version\s([\d\.\w]+)", cli.execute("show version"))
+    return version.groups()[0] if version else None
+
+
+def enable_ipxe():
+    cli.configurep(["boot ipxe timeout 30"])
+    cli.executep('copy running-config startup-config')
+    cli.executep('reload /noverify')
+
+
+def main():
+    # Get model
+    model = get_model()
+    if model:
+        print("Model is: %s" % model)
+    # Check version
+    version = get_version()
+    if version:
+        print("Version is: %s" % version)
+    # Check upgrade
+
+    # Remove iPXE
+
+    # Request config
+
+
+if __name__ == "__main__":
+    main()

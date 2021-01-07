@@ -1,0 +1,4 @@
+.vscode
+Dockerfile
+.pytest_cache
+__pycache__
