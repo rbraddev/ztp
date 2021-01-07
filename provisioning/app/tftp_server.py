@@ -33,9 +33,7 @@ class TFTPServer(BaseServer):
         super().__init__(address, port, retries, timeout, server_stats_callback)
 
     def get_handler(self, server_addr, peer, path, options):
-        return RequestHandler(
-            server_addr, peer, path, options, self._root, self._handler_stats_callback
-        )
+        return RequestHandler(server_addr, peer, path, options, self._root, self._handler_stats_callback)
 
 
 def main():

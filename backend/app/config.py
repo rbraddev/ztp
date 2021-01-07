@@ -22,7 +22,5 @@ def get_settings() -> BaseSettings:
         settings = yaml.load(f.read())
 
     return Settings(
-        PROJECT=settings.get("project"),
-        ENVIRONMENT=settings.get("environment"),
-        SWVERSIONS=settings.get("swversions")
+        PROJECT=settings.get("project"), ENVIRONMENT=settings.get("environment"), SWVERSIONS=settings.get("swversions")
     )
