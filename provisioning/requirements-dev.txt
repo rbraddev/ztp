@@ -1,4 +1,5 @@
 fbtftp
+celery[redis]
 
 pytest
 black
