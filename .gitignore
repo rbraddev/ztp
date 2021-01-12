@@ -12,3 +12,4 @@ files/*
 !files/ztp9300.py
 dhcpd.leases
 dhcpd.leases~
+flower

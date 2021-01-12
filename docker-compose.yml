@@ -19,17 +19,17 @@ services:
   #     - 8080:8080
   #   volumes:
   #     - /var/run/docker.sock:/var/run/docker.sock:ro
-  api:
-    container_name: api
-    build: ./backend
-    command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 80
-    expose:
-      - 80
-    networks:
-      - webservices
-      - backend
-    volumes:
-      - ./backend:/usr/src/app
+  # api:
+  #   container_name: api
+  #   build: ./backend
+  #   command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 80
+  #   expose:
+  #     - 80
+  #   networks:
+  #     - webservices
+  #     - backend
+  #   volumes:
+  #     - ./backend:/usr/src/app
     # labels:
     #   - traefik.enable=true
     #   - traefik.http.routers.api.rule=PathPrefix(`/api`) || PathPrefix(`/docs`)
@@ -61,32 +61,39 @@ services:
       dockerfile: Dockerfile.tftp
     ports:
       - 69:69/udp
-    networks:
-      - tftp
-      - backend
+    # networks:
+    #   # - tftp
+    #   - backend
     volumes:
       - ./files:/usr/src/tftproot
-  rabbitmq:
-    image: rabbitmq:alpine
-    container_name: rabbitmq
-    networks:
-      - backend
-  # redis:
-  #   image: redis:6-alpine
-  #   container_name: redis
+  # rabbitmq:
+  #   image: rabbitmq
+  #   container_name: rabbitmq
   #   networks:
   #     - backend
-  worker:
-    build:
-      context: ./provisioning
-      dockerfile: Dockerfile.worker
+  # flower:
+  #   container_name: flower
+  #   build: ./flower
+  #   ports:
+  #     - 49555:5555
+  #   networks:
+  #     - backend
+  #   command:
+  #     - "--broker=amqp://guest@rabbitmq:5672/"
+  # worker:
+  #   build:
+  #     context: ./provisioning
+  #     dockerfile: Dockerfile.worker
+  #   networks:
+  #     - backend
+  #   entrypoint: celery -A celery_app.tasks worker -c 2 --loglevel=info -Q provisioning -n provisioning
 
-networks:
-  proxy:
-    external: true
-  tftp:
-    external: true
-  webservices:
-    external: false
-  backend:
-    external: false
+# networks:
+#   proxy:
+#     external: true
+#   # tftp:
+#   #   external: true
+#   webservices:
+#     external: false
+#   backend:
+#     external: false
