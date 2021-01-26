@@ -1,8 +1,9 @@
 import os
 
+impr
 from fbtftp.base_handler import ResponseData
 
-# from celery_app.tasks import provision
+from celery_app.tasks import provision
 
 
 class FileResponseData(ResponseData):
@@ -32,6 +33,8 @@ def handle_request(root, file):
 
 def handle_session(stats):
     if stats.packets_sent > 0:
+        job_id = f"{stats.peer[0]}-{stats.file_path}"
+        
         print(f"{stats.peer[0]} received {stats.file_path}")
-        # task = provision.delay()
-        # print(task.id)
+        task = provision.delay()
+        print(task.id)

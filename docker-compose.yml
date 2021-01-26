@@ -30,11 +30,11 @@ services:
   #     - backend
   #   volumes:
   #     - ./backend:/usr/src/app
-    # labels:
-    #   - traefik.enable=true
-    #   - traefik.http.routers.api.rule=PathPrefix(`/api`) || PathPrefix(`/docs`)
-    #   - traefik.http.routers.api.entrypoints=web
-    #   - traefik.port=80
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.http.routers.api.rule=PathPrefix(`/api`) || PathPrefix(`/docs`)
+  #     - traefik.http.routers.api.entrypoints=web
+  #     - traefik.port=80
   # files:
   #   container_name: files
   #   image: nginx:alpine
@@ -61,39 +61,40 @@ services:
       dockerfile: Dockerfile.tftp
     ports:
       - 69:69/udp
-    # networks:
-    #   # - tftp
-    #   - backend
+    networks:
+      - tftp
+      - backend
     volumes:
       - ./files:/usr/src/tftproot
-  # rabbitmq:
-  #   image: rabbitmq
-  #   container_name: rabbitmq
-  #   networks:
-  #     - backend
-  # flower:
-  #   container_name: flower
-  #   build: ./flower
-  #   ports:
-  #     - 49555:5555
-  #   networks:
-  #     - backend
-  #   command:
-  #     - "--broker=amqp://guest@rabbitmq:5672/"
-  # worker:
-  #   build:
-  #     context: ./provisioning
-  #     dockerfile: Dockerfile.worker
-  #   networks:
-  #     - backend
-  #   entrypoint: celery -A celery_app.tasks worker -c 2 --loglevel=info -Q provisioning -n provisioning
+  rabbitmq:
+    image: rabbitmq
+    container_name: rabbitmq
+    networks:
+      - backend
+  flower:
+    container_name: flower
+    build: ./flower
+    ports:
+      - 49555:5555
+    networks:
+      - proxy
+      - backend
+    command:
+      - "--broker=amqp://guest@rabbitmq:5672/"
+  worker:
+    build:
+      context: ./provisioning
+      dockerfile: Dockerfile.worker
+    networks:
+      - backend
+    entrypoint: celery -A celery_app.tasks worker -c 2 --loglevel=info -Q provision -n provision
 
-# networks:
-#   proxy:
-#     external: true
-#   # tftp:
-#   #   external: true
+networks:
+  proxy:
+    external: true
+  tftp:
+    external: true
 #   webservices:
 #     external: false
-#   backend:
-#     external: false
+  backend:
+    external: false
