@@ -1,6 +1,9 @@
 fbtftp
 celery
+redis
+scrapli[ssh2]
 
 pytest
 black
 flake8
+bpython

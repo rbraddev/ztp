@@ -1,8 +1,10 @@
 import os
+import time
+from random import randint
 
-impr
 from fbtftp.base_handler import ResponseData
 
+from celery_app.worker import celery_app
 from celery_app.tasks import provision
 
 
@@ -33,8 +35,17 @@ def handle_request(root, file):
 
 def handle_session(stats):
     if stats.packets_sent > 0:
-        job_id = f"{stats.peer[0]}-{stats.file_path}"
-        
+        time.sleep(randint(0.0, 5.0))
         print(f"{stats.peer[0]} received {stats.file_path}")
-        task = provision.delay()
-        print(task.id)
+
+        task_id = f"{stats.peer[0]}-{stats.file_path}"
+        task = celery_app.AsyncResult(task_id)
+        if task.state in ["FAILED", "SUCCESS"]:
+            task.forget()
+            task = provision.apply_async(task_id=task_id)
+            print(task.id)
+        elif task.state == "PENDING":
+            task = provision.apply_async(task_id=task_id)
+            print(task.id)
+        else:
+            print(f"{task_id} is currently running")

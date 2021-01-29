@@ -71,23 +71,40 @@ services:
     container_name: rabbitmq
     networks:
       - backend
-  flower:
-    container_name: flower
-    build: ./flower
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - backend
+  # flower:
+  #   container_name: flower
+  #   build: ./flower
+  #   ports:
+  #     - 49555:5555
+  #   networks:
+  #     - proxy
+  #     - backend
+  #   command:
+  #     - "--broker=amqp://guest@rabbitmq:5672/"
+  clearly-server:
+    image: rsalmei/clearly
+    container_name: clearly-server
     ports:
-      - 49555:5555
+      - 12223:12223
     networks:
       - proxy
       - backend
-    command:
-      - "--broker=amqp://guest@rabbitmq:5672/"
+    command: server amqp://guest@rabbitmq:5672/ --backend redis://redis/0
+    depends_on: 
+      - rabbitmq
+    restart: on-failure
   worker:
     build:
       context: ./provisioning
       dockerfile: Dockerfile.worker
     networks:
       - backend
-    entrypoint: celery -A celery_app.tasks worker -c 2 --loglevel=info -Q provision -n provision
+    entrypoint: celery -A celery_app.tasks worker -E -c 4 -l DEBUG -Q provision -n provision
 
 networks:
   proxy:
