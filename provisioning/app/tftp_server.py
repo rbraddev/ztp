@@ -10,7 +10,7 @@ class RequestHandler(BaseHandler):
         super().__init__(server_addr, peer, path, options, stats_callback)
 
     def get_response_data(self):
-        request = handle_request(self._root, self._path)
+        request = handle_request(self._root, self._path, self._peer)
         if request is None:
             raise FileNotFoundError(f"File not found: {self._root}/{self._path}")
 

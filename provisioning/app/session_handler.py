@@ -3,9 +3,12 @@ import time
 from random import randint
 
 from fbtftp.base_handler import ResponseData
+from fbtftp.base_handler import StringResponseData
 
+from config import Config
 from celery_app.worker import celery_app
 from celery_app.tasks import provision
+from core.utils import render_file
 
 
 class FileResponseData(ResponseData):
@@ -23,14 +26,21 @@ class FileResponseData(ResponseData):
         self._reader.close()
 
 
-def handle_request(root, file):
-    if file == "testfile1.txt":
-        return FileResponseData(os.path.join(root, "testfile2.txt"))
+def handle_request(root: str, file: str, host: str):
+    c = Config()
 
-    if os.path.exists(os.path.join(root, file)):
-        return FileResponseData(os.path.join(root, file))
-
-    return None
+    if file == 'network-confg':
+        config = render_file(
+            './templates/config',
+            file, username=c.credentials["provision"]["username"],
+            password=c.credentials["provision"]["password"],
+            host=host[0]
+        )
+        return StringResponseData(config)
+    elif os.path.exists(os.path.join(root, file)):
+        return FileResponseData(os.path.join(root, file))    
+    else:
+        return None
 
 
 def handle_session(stats):

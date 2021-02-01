@@ -2,6 +2,8 @@ fbtftp
 celery
 redis
 scrapli[ssh2]
+jinja2
+ruamel.yaml
 
 pytest
 black
