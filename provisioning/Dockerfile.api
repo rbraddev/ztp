@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster
+FROM python:3.8-slim-buster
 
 WORKDIR /usr/src/app
 
@@ -9,6 +9,8 @@ RUN apt-get update \
   && apt-get -y install curl netcat gcc iputils-ping \
   && apt-get clean
 
-COPY . .
+COPY ./requirements-api.txt .
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements-api.txt
+
+COPY ./api .

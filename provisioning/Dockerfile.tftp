@@ -1,12 +1,12 @@
-FROM python:3.9-slim-buster
-RUN apt-get update && apt-get install -y gcc python3-dev iputils-ping && pip install --upgrade pip
+FROM python:3.8-slim-buster
+RUN apt-get update && apt-get install -y gcc python3-dev iputils-ping curl && pip install --upgrade pip
 
 WORKDIR /usr/src
 
-COPY requirements-dev.txt .
-RUN pip install -r requirements-dev.txt
+COPY requirements-tftp.txt .
+RUN pip install -r requirements-tftp.txt
 
-COPY ./app ./app
+COPY ./tftp ./app
 
 WORKDIR /usr/src/app
 

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.config import get_settings, Settings
-from app.models.provisioning import DeviceVersion
+from config import get_settings, Settings
+from models.provisioning import DeviceVersion
 
 router = APIRouter()
 

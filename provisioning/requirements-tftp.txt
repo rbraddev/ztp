@@ -2,6 +2,8 @@ fbtftp
 celery
 redis
 scrapli[ssh2]
+scrapli[genie]
+genie
 jinja2
 ruamel.yaml
 

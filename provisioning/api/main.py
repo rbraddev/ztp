@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
-from app.api.api import router
+from api.api import router
 
 
 def create_application() -> FastAPI:

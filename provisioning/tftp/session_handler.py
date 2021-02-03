@@ -29,16 +29,17 @@ class FileResponseData(ResponseData):
 def handle_request(root: str, file: str, host: str):
     c = Config()
 
-    if file == 'network-confg':
+    if file == "network-confg":
         config = render_file(
-            './templates/config',
-            file, username=c.credentials["provision"]["username"],
+            "./templates/config",
+            file,
+            username=c.credentials["provision"]["username"],
             password=c.credentials["provision"]["password"],
-            host=host[0]
+            host=host[0],
         )
         return StringResponseData(config)
     elif os.path.exists(os.path.join(root, file)):
-        return FileResponseData(os.path.join(root, file))    
+        return FileResponseData(os.path.join(root, file))
     else:
         return None
 

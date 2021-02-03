@@ -1,11 +1,11 @@
-FROM python:3.9-slim-buster
+FROM python:3.8-slim-buster
 
 WORKDIR /usr/src/app
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-COPY ./app/celery_app ./celery_app
+COPY ./tftp/celery_app ./celery_app
 COPY ./requirements-celery.txt .
 
 RUN pip install -r requirements-celery.txt

@@ -12,3 +12,4 @@ cov.html
 files/*
 dhcpd.leases
 dhcpd.leases~
+__pycache__
