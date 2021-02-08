@@ -51,12 +51,13 @@ def handle_session(stats):
 
         task_id = f"{stats.peer[0]}-{stats.file_path}"
         task = celery_app.AsyncResult(task_id)
+
         if task.state in ["FAILED", "SUCCESS"]:
             task.forget()
-            task = provision.apply_async(task_id=task_id)
+            task = provision.apply_async(task_id=task_id, args=[stats.peer[0], "provision"])
             print(task.id)
         elif task.state == "PENDING":
-            task = provision.apply_async(task_id=task_id)
+            task = provision.apply_async(task_id=task_id, args=[stats.peer[0], "provision"])
             print(task.id)
         else:
             print(f"{task_id} is currently running")

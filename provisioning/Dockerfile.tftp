@@ -3,6 +3,9 @@ RUN apt-get update && apt-get install -y gcc python3-dev iputils-ping curl && pi
 
 WORKDIR /usr/src
 
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 COPY requirements-tftp.txt .
 RUN pip install -r requirements-tftp.txt
 

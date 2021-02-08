@@ -1,11 +1,15 @@
 FROM python:3.8-slim-buster
 
-WORKDIR /usr/src/app
+RUN apt-get update && apt-get install -y iputils-ping && pip install --upgrade pip
+
+WORKDIR /usr/src
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-COPY ./tftp/celery_app ./celery_app
 COPY ./requirements-celery.txt .
-
 RUN pip install -r requirements-celery.txt
+
+COPY ./tftp ./app
+
+WORKDIR /usr/src/app

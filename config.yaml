@@ -12,6 +12,6 @@ swversions:
     version: "16.09.06"
     image: cat3k_caa-universalk9.16.09.06.SPA.bin
   c3750:
-    version: "12.2.55-SE12"
-    image: c3750-ipbasek9-mz.122-55.SE12.bin
-    size: 12111413
+    version: "12.2(55)SE8"
+    image: c3750-ipbasek9-tar.122-55.SE8.tar
+    size: 15923200

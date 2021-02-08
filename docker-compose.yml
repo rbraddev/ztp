@@ -72,26 +72,26 @@ services:
     volumes:
       - ./files:/usr/src/tftproot
       - ./config.yaml:/usr/src/app/config.yaml
-  # rabbitmq:
-  #   image: rabbitmq
-  #   container_name: rabbitmq
-  #   networks:
-  #     - backend
-  # redis:
-  #   image: redis
-  #   container_name: redis
-  #   networks:
-  #     - backend
-  # flower:
-  #   container_name: flower
-  #   build: ./flower
-  #   ports:
-  #     - 49555:5555
-  #   networks:
-  #     - proxy
-  #     - backend
-  #   command:
-  #     - "--broker=amqp://guest@rabbitmq:5672/"
+  rabbitmq:
+    image: rabbitmq
+    container_name: rabbitmq
+    networks:
+      - backend
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - backend
+  flower:
+    container_name: flower
+    build: ./flower
+    ports:
+      - 49555:5555
+    networks:
+      - proxy
+      - backend
+    command:
+      - "--broker=amqp://guest@rabbitmq:5672/"
   # clearly-server:
   #   image: rsalmei/clearly
   #   container_name: clearly-server
@@ -104,13 +104,15 @@ services:
   #   depends_on: 
   #     - rabbitmq
   #   restart: on-failure
-  # worker:
-  #   build:
-  #     context: ./provisioning
-  #     dockerfile: Dockerfile.worker
-  #   networks:
-  #     - backend
-  #   entrypoint: celery -A celery_app.tasks worker -E -c 4 -l DEBUG -Q provision -n provision
+  worker:
+    build:
+      context: ./provisioning
+      dockerfile: Dockerfile.worker
+    volumes:
+      - ./config.yaml:/usr/src/app/config.yaml
+    networks:
+      - backend
+    entrypoint: celery -A celery_app.tasks worker -E -c 4 -l DEBUG -Q provision -n provision
 
 networks:
   proxy:
