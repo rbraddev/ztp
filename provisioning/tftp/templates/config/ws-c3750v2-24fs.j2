@@ -1,0 +1,64 @@
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname {{ hostname }}
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret {{ enable if enable else password }}
+!
+username {{ username }} secret {{ password }}
+!
+!
+aaa new-model
+!
+aaa authentication login default local
+aaa authorization exec default local
+!
+aaa session-id common
+switch 1 provision ws-c3750v2-24fs
+system mtu routing 1500
+ip domain-name {{ domain_name }}
+!
+file prompt alert
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+crypto key generate rsa modulus 2048
+!
+ip tftp source-interface Vlan1
+ip ssh version 2
+!
+interface range FastEthernet1/0/1-10
+ description USER
+!
+interface range FastEthernet1/0/11-20
+ description VOICE
+!
+interface FastEthernet1/0/21
+!
+interface FastEthernet1/0/22
+!
+interface FastEthernet1/0/23
+!
+interface FastEthernet1/0/24
+!
+interface GigabitEthernet1/0/1
+ description UPLINK1
+!
+interface GigabitEthernet1/0/2
+ description UPLINK1
+!
+interface Vlan1
+ ip address 10.0.0.10 255.255.255.0
+!
+ip classless
+ip http server
+ip http secure-server
+!
+line con 0
+line vty 5 15
+!
+end

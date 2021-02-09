@@ -72,6 +72,7 @@ services:
     volumes:
       - ./files:/usr/src/tftproot
       - ./config.yaml:/usr/src/app/config.yaml
+      - ./device_variables.yaml:/usr/src/app/device_variables.yaml
   rabbitmq:
     image: rabbitmq
     container_name: rabbitmq
@@ -110,6 +111,7 @@ services:
       dockerfile: Dockerfile.worker
     volumes:
       - ./config.yaml:/usr/src/app/config.yaml
+      - ./device_variables.yaml:/usr/src/app/device_variables.yaml
     networks:
       - backend
     entrypoint: celery -A celery_app.tasks worker -E -c 4 -l DEBUG -Q provision -n provision

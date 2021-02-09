@@ -8,7 +8,7 @@ from fbtftp.base_handler import StringResponseData
 from config import Config
 from celery_app.worker import celery_app
 from celery_app.tasks import provision
-from core.utils import render_file
+from core.utils import render_file, load_yaml
 
 
 class FileResponseData(ResponseData):
@@ -32,10 +32,23 @@ def handle_request(root: str, file: str, host: str):
     if file == "network-confg":
         config = render_file(
             "./templates/config",
-            file,
+            f"{file}.j2",
             username=c.credentials["provision"]["username"],
             password=c.credentials["provision"]["password"],
             host=host[0],
+        )
+        return StringResponseData(config)
+    elif os.path.exists(os.path.join(f"./templates/config/{file.split('_')[0]}.j2")):
+        print(f"file is {file}")
+        variables = load_yaml("device_variables.yaml")
+        global_variables = variables.get("global")
+        device_variables = variables.get(file.split('_')[1].split(".")[0])
+        config = render_file(
+            "./templates/config",
+            f"{file.split('_')[0]}.j2",
+            **c.credentials["production"],
+            **global_variables,
+            **device_variables
         )
         return StringResponseData(config)
     elif os.path.exists(os.path.join(root, file)):
@@ -45,7 +58,7 @@ def handle_request(root: str, file: str, host: str):
 
 
 def handle_session(stats):
-    if stats.packets_sent > 0:
+    if stats.packets_sent > 0 and stats.file_path == "network-confg":
         time.sleep(randint(0.0, 5.0))
         print(f"{stats.peer[0]} received {stats.file_path}")
 

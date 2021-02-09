@@ -4,6 +4,10 @@ credentials:
   provision:
     username: provision
     password: provision
+  production:
+    username: production
+    password: production
+    enable: secretproduction
 swversions:
   "9300":
     version: "16.12.04"

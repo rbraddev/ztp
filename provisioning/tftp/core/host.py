@@ -1,13 +1,15 @@
-import os
 import time
 
 from scrapli.driver.core import IOSXEDriver
 
 from config import Config
+from core.utils import is_online, render_file, load_yaml
 
 
 class Host:
-    swversions: dict = Config().swversions
+    c = Config()
+    swversions: dict = c.swversions
+    credentials: dict = c.credentials
 
     def __init__(self, ip: str, username: str, password: str, enable: str = None):
         self.ip = ip
@@ -75,21 +77,6 @@ class Host:
         else:
             raise ValueError("Unable to find device platform")
 
-    def is_online(self) -> bool:
-        attempts = 0
-        online = False
-        while True:
-            pingtest = os.popen(f'ping -c 3 {self.ip}')
-            pingres = pingtest.read()
-            if ', 0% packet loss' in pingres:
-                online = True
-                break
-            elif attempts > 600:
-                break
-            time.sleep(1)
-            attempts += attempts
-        return online
-
     def upgrade_device(self):
         attempts = 0
         while True:
@@ -112,21 +99,12 @@ class Host:
                 f"archive download-sw /reload /overwrite /imageonly http:/10.0.0.1/files/{new_image['image']}",
                 timeout_ops=1200
             )
-            # if "Requested system reload skipped due to unsaved config changes." in response.raw_result:
-            #     print("saving config")
-            #     self._conn.send_command("write memory")
-            #     print("reloading device")
-            #     self._conn.send_interactive(
-            #         [
-            #             ("reload", "[confirm]"),
-            #             ("\n", "#")
-            #         ]
-            #     )
+
             print("download finished")
             self.disconnect()
             time.sleep(5)
             print("waiting for device to come back online")
-            if self.is_online():
+            if is_online(self.ip):
                 self.get_device_details()
                 if not self._upgrade_required():
                     print("upgrade successful")
@@ -134,3 +112,8 @@ class Host:
                     print("upgrade failed")
         else:
             print("upgrade not required")
+
+    def send_config(self, config_type):
+        if config_type == "initial":
+            # self._conn.send_configs(config.split("\n"))
+            pass

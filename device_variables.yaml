@@ -1,0 +1,14 @@
+---
+global:
+  domain_name: production.local
+fdo1910y0vj:
+  hostname: SWITCH1
+  vlans:
+    10:
+      description: USER
+      ip: 10.10.0.1
+      mask: 255.255.255.0
+    20:
+      description: VOICE
+      ip: 10.20.0.1
+      mask: 255.255.255.0
